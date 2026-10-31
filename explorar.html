@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explorar · Top 10 OST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<style>
+  * { box-sizing: border-box; }
+  body { background: var(--dark); color: var(--text); font-family: 'Exo 2', sans-serif; }
+  .explore-main { position: relative; z-index: 10; max-width: 1100px; margin: 0 auto; padding: 55px 24px 80px; }
+  .explore-main h1 { color: #fff; font-family: 'Rajdhani', sans-serif; font-size: clamp(2rem, 4vw, 3rem); }
+  .explore-intro { color: var(--text-dim); line-height: 1.7; margin: 8px 0 28px; }
+  .original-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin: 0 0 22px; display: grid; grid-template-columns: minmax(180px, 32%) 1fr; }
+  .original-card img { width: 100%; height: 100%; min-height: 230px; object-fit: cover; }
+  .original-content { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .original-content h2 { font: 700 1.8rem 'Rajdhani', sans-serif; color: #fff; }
+  .original-content p { color: var(--text-dim); line-height: 1.65; }
+  .original-meta { color: var(--text-dim); font-size: .9rem; }
+  .original-meta strong { color: var(--cyan); }
+  @media(max-width:650px) { .original-card { grid-template-columns: 1fr; } .original-card img { height: 190px; min-height: 0; } }
+</style>
+</head>
+<body>
+<main class="explore-main">
+  <h1>Explorar canciones</h1>
+  <p class="explore-intro">Aquí encontrarás las 10 bandas sonoras originales del catálogo. Las canciones que suban los usuarios no se agregan a esta sección; pueden competir por un lugar en el Top 10.</p>
+  <div id="catalogo"></div>
+</main>
+<script src="app.js"></script>
+<script>
+  mountUserPanel('explorar.html');
+  var TOP10 = [
+  { "rank": "01", "id": "top-01", "titulo": "Minecraft", "alt": "Minecraft",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWLFxFHyTo4fOFrNBONyYH-QSQpY4NK3ZFbcVcD4m4TA&s&ec=121643199",
+    "compositor": "C418", "tag": "🌿 Ambient · Indie",
+    "descripcion": "La banda sonora de Minecraft es uno de los referentes más importantes de la música ambiental. Con piezas minimalistas construidas sobre pianos suaves, la música aparece de forma esporádica durante la exploración, deteniendo el tiempo.",
+    "razonTitulo": "¿Por qué está en esta lista?",
+    "razon": "Porque logra transmitir emociones profundas con una economía de medios extraordinaria. La música es parte indivisible de su identidad.",
+    "audio": "sonidos/minecraft.mp3" },
+  { "rank": "02", "id": "top-02", "titulo": "Uncharted 3: Drake's Deception", "alt": "Uncharted 3",
+    "img": "https://preview.redd.it/did-you-all-enjoy-uncharted-3-v0-s30l51p93g8a1.jpg?width=640&crop=smart&auto=webp&s=448ee4ad438f5ec93a5264b629bc9228c4791b5c",
+    "compositor": "Greg Edmonson", "tag": "🎬 Cinemático · Triple-A",
+    "descripcion": "Una propuesta orquestal que combina instrumentos árabes y arreglos exóticos para evocar los misterios del desierto. La música no ilustra la acción — la define y la hace cinematográficamente memorable.",
+    "razonTitulo": "Análisis técnico",
+    "razon": "El uso de instrumentos de viento árabes y cuerdas tensas crea una inmersión total en los escenarios exóticos del juego.",
+    "audio": "sonidos/uncharted.mp3" },
+  { "rank": "03", "id": "top-03", "titulo": "Red Dead Redemption 2", "alt": "Red Dead Redemption 2",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6Zw3ba8igTlqTD-rCWWQgpjA1dFwTv0DV3w&s",
+    "compositor": "Woody Jackson", "tag": "🤠 Western · Adaptativa",
+    "descripcion": "Un universo sonoro inspirado en el western pero con sensibilidad moderna. Lo más notable es su sistema adaptativo: la música cambia según tus acciones y el clima, creando una experiencia sonora viva.",
+    "razonTitulo": "Impacto narrativo",
+    "razon": "Los temas cantados en momentos clave transforman escenas ya poderosas en momentos absolutamente devastadores.",
+    "audio": "sonidos/rdr2.mp3" },
+  { "rank": "04", "id": "top-04", "titulo": "Persona 4 Golden", "alt": "Persona 4 Golden",
+    "img": "https://cdn.akamai.steamstatic.com/steam/apps/1113000/header.jpg",
+    "compositor": "Shoji Meguro", "tag": "🎭 JRPG · Jazzy · Pop",
+    "descripcion": "Mezcla con audacia J-Pop, jazz sofisticado y rock enérgico. Cada pista refleja exactamente lo que el jugador siente en la vida cotidiana de Inaba o en el mundo sombra.",
+    "razonTitulo": "¿Por qué está en esta lista?",
+    "razon": "Demuestra que la música puede ser tan poderosa como su narrativa, dejando melodías grabadas en la memoria mucho después de jugar.",
+    "audio": "sonidos/persona4.mp3" },
+  { "rank": "05", "id": "top-05", "titulo": "Undertale", "alt": "Undertale",
+    "img": "https://cdn.akamai.steamstatic.com/steam/apps/391540/header.jpg",
+    "compositor": "Toby Fox", "tag": "💛 Indie · RPG · Emocional",
+    "descripcion": "Compuesta íntegramente por Toby Fox, es un lenguaje propio que habla directamente al corazón. Sus melodías encajan tan perfectamente que es imposible imaginar el juego sin ellas.",
+    "razonTitulo": "Impacto Emocional",
+    "razon": "Demuestra que con visión artística, un solo compositor puede crear algo que rivaliza con las más grandes producciones.",
+    "audio": "sonidos/undertale.mp3" },
+  { "rank": "06", "id": "top-06", "titulo": "Hollow Knight", "alt": "Hollow Knight",
+    "img": "https://cdn.akamai.steamstatic.com/steam/apps/367520/header.jpg",
+    "compositor": "Christopher Larkin", "tag": "🦋 Indie · Ambient",
+    "descripcion": "Una de las bandas sonoras más atmosféricas. Cada nota parece diseñada para hacerte sentir pequeño dentro de Hallownest, construyendo el mundo tanto como sus visuales.",
+    "razonTitulo": "Atmósfera",
+    "razon": "La música es absolutamente inseparable de su mundo. Te pone pensativo y melancólico, invitándote a explorar lo desconocido.",
+    "audio": "sonidos/hollowknight.mp3" },
+  { "rank": "07", "id": "top-07", "titulo": "Cuphead", "alt": "Cuphead",
+    "img": "https://cdn.akamai.steamstatic.com/steam/apps/268910/header.jpg",
+    "compositor": "Kristofer Maddigan", "tag": "🎺 Jazz · Big Band",
+    "descripcion": "Grabada íntegramente con músicos en vivo, recrea la era dorada de los dibujos animados de los años 30. No suena como un videojuego, sino como un cortometraje animado clásico.",
+    "razonTitulo": "Autenticidad",
+    "razon": "Una banda sonora sin comparación en la industria — única, vibrante y grabada con la instrumentación real de la época.",
+    "audio": "sonidos/cuphead.mp3" },
+  { "rank": "08", "id": "top-08", "titulo": "Sonic Frontiers", "alt": "Sonic Frontiers",
+    "img": "https://cdn.akamai.steamstatic.com/steam/apps/1237320/header.jpg",
+    "compositor": "Tomoya Ohtani", "tag": "⚡ Rock · Épico",
+    "descripcion": "Mezcla rock épico, metal y electrónica. Mientras la exploración es contemplativa, las batallas contra titanes explotan con una energía monumental.",
+    "razonTitulo": "Evolución",
+    "razon": "Elevó el estándar de lo que puede ser la música de Sonic, haciendo que cada batalla se sienta histórica.",
+    "audio": "sonidos/sonicfrontiers.mp3" },
+  { "rank": "09", "id": "top-09", "titulo": "The Last of Us", "alt": "The Last of Us",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202312/0117/315718bce7eed62e3cf3fb02d61b81ff1782d6b6cf850fa4.png",
+    "compositor": "Gustavo Santaolalla", "tag": "🎸 Minimalista · Emocional",
+    "descripcion": "Se caracteriza por su minimalismo y carga emocional, usando guitarras suaves y silencios que refuerzan la narrativa. Cada acorde parece respirar junto al jugador, creando una intimidad sonora que pocas bandas sonoras logran.",
+    "razonTitulo": "¿Por qué está en esta lista?",
+    "razon": "Porque logra transmitir emociones profundas con muy pocos elementos, convirtiendo el silencio en parte integral de su lenguaje musical.",
+    "audio": "sonidos/tlou.mp3" },
+  { "rank": "10", "id": "top-10", "titulo": "Elden Ring", "alt": "Elden Ring",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202110/2000/YMUoJUYNX0xWk6eTKuZLr5Iw.jpg",
+    "compositor": "Yuka Kitamura", "tag": "🔥 Epic Orchestra · Coros",
+    "descripcion": "Banda sonora épica con coros y orquesta que refuerzan la escala del mundo y la intensidad de los combates. Cada tema de jefe es una obra independiente que eleva la confrontación a niveles casi míticos.",
+    "razonTitulo": "¿Por qué está en esta lista?",
+    "razon": "Porque convierte cada batalla en una experiencia épica e irrepetible, donde la música no acompaña la acción — la protagoniza.",
+    "audio": "sonidos/eldenring.mp3" }
+  ];
+  var catalogo = document.getElementById('catalogo');
+  TOP10.forEach(function (song) {
+    var card = el('article', { class: 'original-card' });
+    var image = el('img', { src: song.img, alt: song.alt || song.titulo });
+    var content = el('div', { class: 'original-content' });
+    content.appendChild(el('h2', { text: song.titulo }));
+    content.appendChild(el('div', { class: 'original-meta' }, [
+      el('strong', { text: 'Compositor: ' }),
+      document.createTextNode(song.compositor || 'No especificado'),
+      document.createElement('br'),
+      el('strong', { text: 'Género: ' }),
+      document.createTextNode(song.tag || 'No especificado')
+    ]));
+    content.appendChild(el('p', { text: song.descripcion }));
+    content.appendChild(buildAudio(song.audio));
+    content.appendChild(buildRating(song.id));
+    content.appendChild(buildComments(song.id));
+    card.appendChild(image);
+    card.appendChild(content);
+    catalogo.appendChild(card);
+  });
+</script>
+</body>
+</html>

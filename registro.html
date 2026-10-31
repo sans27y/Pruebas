@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crear cuenta · Top 10 OST</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box} body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at top,#123044,#05090e 65%);font-family:'Press Start 2P',cursive;color:#eafaff}
+.caja{width:min(100%,470px);padding:34px 30px;background:rgba(8,18,27,.96);border:1px solid #00ceff66;border-radius:18px;box-shadow:0 0 35px #00ceff22;text-align:center}
+h1{font-size:17px;line-height:1.8;color:#00ceff;margin:0 0 16px}.sub{font:12px Arial,sans-serif;color:#b7c9d5;line-height:1.6;margin:0 0 25px}
+.campo{text-align:left;margin:16px 0}.campo label{display:block;font-size:9px;line-height:1.8;color:#d8edf5;margin-bottom:8px}.campo input{width:100%;padding:14px 12px;border-radius:8px;border:1px solid #315267;background:#101e29;color:white;font:12px Arial,sans-serif}.campo input:focus{outline:2px solid #00ceff;box-shadow:0 0 12px #00ceff44}
+button,.link-btn{display:block;width:100%;padding:14px 10px;margin-top:13px;border-radius:8px;text-decoration:none;cursor:pointer;font:10px 'Press Start 2P',cursive;line-height:1.7;transition:.2s}
+.primary{border:0;background:#00ceff;color:#00131a}.primary:hover{background:#7be5ff;transform:translateY(-2px)}.secondary{border:1px solid #00ceff;color:#00ceff;background:#10212c}.secondary:hover{background:#18394a}
+.separador{border:0;border-top:1px solid #263b49;margin:24px 0 18px}.nota{font:11px Arial,sans-serif;color:#91a7b5;line-height:1.6;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="caja">
+  <h1>CREAR CUENTA</h1>
+  <p class="sub">Regístrate para calificar canciones, dejar comentarios y compartir tus bandas sonoras favoritas.</p>
+  <div class="campo"><label for="usuario">ELIGE UN NOMBRE DE USUARIO</label><input type="text" id="usuario" placeholder="Crea tu usuario" autocomplete="username"></div>
+  <div class="campo"><label for="password">CREA UNA CONTRASEÑA</label><input type="password" id="password" placeholder="Crea tu contraseña" autocomplete="new-password"></div>
+  <div class="campo"><label for="confirmar">CONFIRMA TU CONTRASEÑA</label><input type="password" id="confirmar" placeholder="Repite tu contraseña" autocomplete="new-password"></div>
+  <button class="primary" type="button" onclick="registrar()">CREAR MI CUENTA</button>
+  <hr class="separador">
+  <p class="sub">¿Ya tienes una cuenta?</p>
+  <a class="link-btn secondary" href="index.html">VOLVER A INICIAR SESIÓN</a>
+  <p class="nota">Al crear tu cuenta podrás iniciar sesión y participar en la comunidad.</p>
+</div>
+<script src="app.js"></script>
+<script>
+function registrar(){
+  var user=document.getElementById('usuario').value.trim();
+  var pass=document.getElementById('password').value;
+  var confirm=document.getElementById('confirmar').value;
+  if(!user||!pass||!confirm){alert('Por favor, completa todos los campos.');return;}
+  if(pass!==confirm){alert('Las contraseñas no coinciden.');return;}
+  var result=Auth.register(user,pass);
+  if(!result.ok){alert(result.msg);return;}
+  alert('¡Cuenta creada correctamente! Ahora inicia sesión con tus datos.');
+  window.location.href='index.html';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Enter')registrar();});
+</script>
+</body>
+</html>

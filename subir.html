@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subir canción · Top 10 OST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark); color: var(--text); font-family: 'Exo 2', sans-serif; font-weight: 300; }
+  h1 { font-family: 'Rajdhani', sans-serif; font-weight: 700; color: #fff; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<main class="page-main">
+  <h1>Subir canción</h1>
+  <p class="intro">Aporta una canción de videojuegos al catálogo de usuarios. Completa los datos, selecciona un archivo .mp3 y agrega una imagen de portada.</p>
+
+  <!-- RNF07: aviso de simulación y derechos de autor -->
+  <div class="msg msg-info sim-notice" id="aviso-simulacion">
+    <strong>Aviso: función de simulación</strong>
+    Esta función es una simulación con fines académicos. Los archivos se guardan únicamente en el navegador de quien los sube y no se comparten con otros dispositivos ni usuarios reales. La verificación de derechos de autor del contenido subido está fuera del alcance del proyecto.
+  </div>
+
+  <div class="upload-form">
+    <div class="form-field">
+      <label for="titulo">Título de la canción</label>
+      <input type="text" id="titulo" maxlength="100" autocomplete="off">
+    </div>
+    <div class="form-field">
+      <label for="videojuego">Videojuego</label>
+      <input type="text" id="videojuego" maxlength="100" autocomplete="off">
+    </div>
+    <div class="form-field">
+      <label for="compositor">Compositor</label>
+      <input type="text" id="compositor" maxlength="100" autocomplete="off">
+    </div>
+    <div class="form-field">
+      <label for="archivo">Archivo de audio</label>
+      <input type="file" id="archivo" accept=".mp3,audio/mpeg">
+      <small>Solo .mp3 · máximo 2 MB</small>
+    </div>
+    <div class="form-field">
+      <label for="portada">Imagen de portada</label>
+      <input type="file" id="portada" accept="image/*">
+      <small>JPG, PNG, WEBP u otra imagen · máximo 2 MB</small>
+    </div>
+    <p class="msg" id="mensaje" role="alert" hidden></p>
+    <button type="button" class="btn" id="btn-subir">Subir canción</button>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+  if (Auth.requireLogin()) {
+    mountUserPanel('subir.html');
+
+    var msg = document.getElementById('mensaje');
+    function show(type, text) {
+      msg.className = 'msg msg-' + type;
+      msg.textContent = text;
+      msg.removeAttribute('hidden');
+    }
+
+    document.getElementById('btn-subir').addEventListener('click', function () {
+      var titulo = document.getElementById('titulo').value.trim();
+      var juego = document.getElementById('videojuego').value.trim();
+      var comp = document.getElementById('compositor').value.trim();
+      var audioInput = document.getElementById('archivo');
+      var coverInput = document.getElementById('portada');
+      var audioFile = audioInput.files[0];
+      var coverFile = coverInput.files[0];
+
+      var faltan = [];
+      if (!titulo) faltan.push('título');
+      if (!juego) faltan.push('videojuego');
+      if (!comp) faltan.push('compositor');
+      if (!audioFile) faltan.push('archivo de audio');
+      if (!coverFile) faltan.push('imagen de portada');
+      if (faltan.length) { show('error', 'Campos obligatorios sin completar: ' + faltan.join(', ') + '.'); return; }
+
+      var audioError = Songs.validateFile(audioFile);
+      if (audioError) { show('error', audioError); audioInput.value = ''; return; }
+      var coverError = Songs.validateCover(coverFile);
+      if (coverError) { show('error', coverError); coverInput.value = ''; return; }
+
+      var audioReader = new FileReader();
+      audioReader.onerror = function () { show('error', 'No se pudo leer el archivo de audio.'); };
+      audioReader.onload = function (audioEvent) {
+        var coverReader = new FileReader();
+        coverReader.onerror = function () { show('error', 'No se pudo leer la imagen de portada.'); };
+        coverReader.onload = function (coverEvent) {
+          var ok = Songs.add({
+            titulo: titulo, videojuego: juego, compositor: comp,
+            subidaPor: Auth.current(), fecha: new Date().toLocaleString('es-CO')
+          }, audioEvent.target.result, coverEvent.target.result);
+
+          if (!ok) {
+            show('error', 'No se pudo guardar la canción. El almacenamiento local está lleno; intenta con archivos más pequeños.');
+            return;
+          }
+
+          show('ok', 'Canción y portada subidas correctamente. Ya aparecerán en Explorar y en el Top 10.');
+          document.getElementById('titulo').value = '';
+          document.getElementById('videojuego').value = '';
+          document.getElementById('compositor').value = '';
+          audioInput.value = '';
+          coverInput.value = '';
+        };
+        coverReader.readAsDataURL(coverFile);
+      };
+      audioReader.readAsDataURL(audioFile);
+    });
+  }
+</script>
+</body>
+</html>
